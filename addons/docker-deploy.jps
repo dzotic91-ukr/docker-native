@@ -15,15 +15,16 @@ actions:
   stackNameDeploy:
     - script: |-
         var url = "${settings.yml}".split('/'),
+            file = url[url.length-1],
             repo = url.splice(0,5).join('/'),
             path = url.splice(2);
         path.pop();
         path = path.join("/");
         if (repo.indexOf(".git") == -1) repo += ".git";
-        return {result: 0, repo: repo, path: path}
+        return {result: 0, repo: repo, path: path, file: file}
     - cmd[${nodes.cp.master.id}]: |-
-        git clone ${response.repo} >> ${globals.log}
-        cd ${response.path} && docker stack deploy -c ${settings.yml} ${settings.stackName} >> ${globals.log}
+        git clone ${response.repo} application >> ${globals.log}
+        cd application/${response.path} && docker stack deploy -c ${response.file} ${settings.stackName} >> ${globals.log}
   stackDeploy:
     cmd[${nodes.cp.master.id}]: |-
       docker network create --driver overlay proxy
