@@ -13,17 +13,17 @@ actions:
     cmd[${nodes.cp.master.id}]: ${settings.preHook}
    
   stackNameDeploy:
-    cmd[${nodes.cp.master.id}]: |-
-      url=${settings.yml}
-      url=$(echo ${url/\/blob\//\/raw\/})
-      project=$(echo ${url%/raw/*})
-      rawPath=$(echo ${url#"$project/raw/"})
-      branchAndPath=$(echo ${rawPath%/*.yml})
-      path=$(grep -q '/' <<< ${branchAndPath} && echo ${branchAndPath#*/} || echo '')
-      git clone $project.git >> ${globals.log}
-      IFS='/' read -r -a array <<< $project
-      cd ${array[4]}/$path
-      docker stack deploy -c $(basename $url) ${settings.stackName} >> ${globals.log}
+    - script: |-
+        var url = "${settings.yml}".split('/'),
+            repo = url.splice(0,5).join('/'),
+            path = url.splice(2);
+        path.pop();
+        path = path.join("/");
+        if (repo.indexOf(".git") == -1) repo += ".git";
+        return {result: 0, repo: repo, path: path}
+    - cmd[${nodes.cp.master.id}]: |-
+        git clone ${response.repo} >> ${globals.log}
+        cd application/${response.path} && docker stack deploy -c ${settings.yml} ${settings.stackName} >> ${globals.log}
   stackDeploy:
     cmd[${nodes.cp.master.id}]: |-
       docker network create --driver overlay proxy
