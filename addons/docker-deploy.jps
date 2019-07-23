@@ -23,7 +23,7 @@ actions:
         return {result: 0, repo: repo, path: path}
     - cmd[${nodes.cp.master.id}]: |-
         git clone ${response.repo} >> ${globals.log}
-        cd application/${response.path} && docker stack deploy -c ${settings.yml} ${settings.stackName} >> ${globals.log}
+        cd ${response.path} && docker stack deploy -c ${settings.yml} ${settings.stackName} >> ${globals.log}
   stackDeploy:
     cmd[${nodes.cp.master.id}]: |-
       docker network create --driver overlay proxy
