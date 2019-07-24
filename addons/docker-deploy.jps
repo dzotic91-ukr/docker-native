@@ -18,11 +18,11 @@ actions:
             file = url[url.length-1],
             repo = url.splice(0,5).join('/'),
             path;
-	      if (url[0].indexOf('blob') != -1) url.splice(0,1);
-	      path = url.splice(1);
-	      path.pop();
-	      path = path.join("/");
-	      repo = repo.replace("raw.githubusercontent.com", "github.com");
+	if (url[0].indexOf('blob') != -1) url.splice(0, 1);
+	path = url.splice(1);
+	path.pop();
+	path = path.join("/");
+	repo = repo.replace("raw.githubusercontent.com", "github.com");
         return {result: 0, repo: repo, path: path, file: file}
 	if (repo.indexOf(".git") == -1) repo += ".git";
     - cmd[${nodes.cp.master.id}]: |-
