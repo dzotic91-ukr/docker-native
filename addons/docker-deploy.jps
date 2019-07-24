@@ -20,6 +20,7 @@ actions:
             path = url.splice(2);
         path.pop();
         path = path.join("/");
+        repo = repo.replace("raw.githubusercontent.com", "github.com");
         if (repo.indexOf(".git") == -1) repo += ".git";
         return {result: 0, repo: repo, path: path, file: file}
     - cmd[${nodes.cp.master.id}]: |-
