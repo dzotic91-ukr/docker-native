@@ -18,13 +18,14 @@ actions:
             file = url[url.length-1],
             repo = url.splice(0,5).join('/'),
             path;
-	if (url[0].indexOf('blob') != -1) url.splice(0, 1);
-	path = url.splice(1);
-	path.pop();
-	path = path.join("/");
-	repo = repo.replace("raw.githubusercontent.com", "github.com");
+        if (url[0].indexOf('blob') != -1) url.splice(0, 1);
+        path = url.splice(1);
+        path.pop();
+        path = path.join("/");
+        repo = repo.replace("raw.githubusercontent.com", "github.com");
         return {result: 0, repo: repo, path: path, file: file}
-	if (repo.indexOf(".git") == -1) repo += ".git";
+        if (repo.indexOf(".git") == -1) repo += ".git";
+        return {result: 0, repo: repo, path: path, file: file}
     - cmd[${nodes.cp.master.id}]: |-
         git clone ${response.repo} application >> ${globals.log}
         cd application/${response.path} && docker stack deploy -c ${response.file} ${settings.stackName} >> ${globals.log}
