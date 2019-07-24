@@ -15,9 +15,9 @@ actions:
   stackNameDeploy:
     - script: |-       
         var url = "${settings.yml}".split('/'),
-            file = url[url.length-1],
-            repo = url.splice(0,5).join('/'),
-            path;
+          file = url[url.length-1],
+          repo = url.splice(0,5).join('/'),
+          path;
         if (url[0].indexOf('blob') != -1) url.splice(0, 1);
         path = url.splice(1);
         path.pop();
